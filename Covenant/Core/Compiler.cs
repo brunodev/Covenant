@@ -67,7 +67,7 @@ namespace Covenant.Core
             {
                 case Models.Grunts.ImplantLanguage.CSharp:
                     return CompileCSharp(request);
-                default:
+                default: 
                     return CompileCSharp(request);
             }
         }

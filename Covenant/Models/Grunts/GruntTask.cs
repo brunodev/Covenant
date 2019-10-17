@@ -27,7 +27,7 @@ namespace Covenant.Models.Grunts
         public List<string> SuggestedValues { get; set; } = new List<string>();
         public bool Optional { get; set; } = false;
         public bool DisplayInCommand { get; set; } = true;
-        
+
         public int GruntTaskId { get; set; }
         public GruntTask Task { get; set; }
     }
@@ -65,8 +65,10 @@ namespace Covenant.Models.Grunts
         {
             GruntTaskReferenceSourceLibraries.Add(new GruntTaskReferenceSourceLibrary
             {
-                GruntTaskId = this.Id, GruntTask = this,
-                ReferenceSourceLibraryId = library.Id, ReferenceSourceLibrary = library
+                GruntTaskId = this.Id,
+                GruntTask = this,
+                ReferenceSourceLibraryId = library.Id,
+                ReferenceSourceLibrary = library
             });
         }
 
@@ -82,8 +84,10 @@ namespace Covenant.Models.Grunts
         {
             GruntTaskReferenceAssemblies.Add(new GruntTaskReferenceAssembly
             {
-                GruntTaskId = this.Id, GruntTask = this,
-                ReferenceAssemblyId = assembly.Id, ReferenceAssembly = assembly
+                GruntTaskId = this.Id,
+                GruntTask = this,
+                ReferenceAssemblyId = assembly.Id,
+                ReferenceAssembly = assembly
             });
         }
 
@@ -99,8 +103,10 @@ namespace Covenant.Models.Grunts
         {
             GruntTaskEmbeddedResources.Add(new GruntTaskEmbeddedResource
             {
-                GruntTaskId = this.Id, GruntTask = this,
-                EmbeddedResourceId = resource.Id, EmbeddedResource = resource
+                GruntTaskId = this.Id,
+                GruntTask = this,
+                EmbeddedResourceId = resource.Id,
+                EmbeddedResource = resource
             });
         }
 
@@ -151,42 +157,47 @@ namespace Covenant.Models.Grunts
                         })
                     );
                 });
-                List<Compiler.Reference> references35 = new List<Compiler.Reference>();
-                this.ReferenceSourceLibraries.ToList().ForEach(RSL =>
+                if (this.ReferenceSourceLibraries.Any(c => c.SupportedDotNetVersions.Contains(Common.DotNetVersion.Net35)))
                 {
+
+                    List<Compiler.Reference> references35 = new List<Compiler.Reference>();
+                    this.ReferenceSourceLibraries.ToList().ForEach(RSL =>
+                    {
+                        references35.AddRange(
+                            RSL.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net35).Select(RA =>
+                            {
+                                return new Compiler.Reference { File = RA.Location, Framework = Common.DotNetVersion.Net35, Enabled = true };
+                            })
+                        );
+                    });
                     references35.AddRange(
-                        RSL.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net35).Select(RA =>
+                        this.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net35).Select(RA =>
                         {
                             return new Compiler.Reference { File = RA.Location, Framework = Common.DotNetVersion.Net35, Enabled = true };
                         })
                     );
-                });
-                references35.AddRange(
-                    this.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net35).Select(RA =>
-                    {
-                        return new Compiler.Reference { File = RA.Location, Framework = Common.DotNetVersion.Net35, Enabled = true };
-                    })
-                );
 
-                File.WriteAllBytes(Common.CovenantTaskCSharpCompiledNet35Directory + this.Name + ".compiled",
-                    Utilities.Compress(Compiler.Compile(new Compiler.CompilationRequest
-                    {
-                        Source = this.Code,
-                        SourceDirectories = this.ReferenceSourceLibraries.Select(RSL => RSL.Location).ToList(),
-                        TargetDotNetVersion = Common.DotNetVersion.Net35,
-                        References = references35,
-                        EmbeddedResources = resources,
-                        UnsafeCompile = this.UnsafeCompile,
-                        Confuse = true,
-                        // TODO: Fix optimization to work with GhostPack
-                        Optimize = !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Rubeus") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Seatbelt") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDPAPI") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDump") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpUp") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI")
-                    }))
-                );
+                    File.WriteAllBytes(Common.CovenantTaskCSharpCompiledNet35Directory + this.Name + ".compiled",
+                        Utilities.Compress(Compiler.Compile(new Compiler.CompilationRequest
+                        {
+                            Source = this.Code,
+                            SourceDirectories = this.ReferenceSourceLibraries.Select(RSL => RSL.Location).ToList(),
+                            TargetDotNetVersion = Common.DotNetVersion.Net35,
+                            References = references35,
+                            EmbeddedResources = resources,
+                            UnsafeCompile = this.UnsafeCompile,
+                            Confuse = true,
+                            // TODO: Fix optimization to work with GhostPack
+                            Optimize = !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Rubeus") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Seatbelt") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDPAPI") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDump") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpUp") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("InveighZero")
+                        }))
+                    );
+                }
                 List<Compiler.Reference> references40 = new List<Compiler.Reference>();
                 this.ReferenceSourceLibraries.ToList().ForEach(RSL =>
                 {
@@ -219,7 +230,8 @@ namespace Covenant.Models.Grunts
                                !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDPAPI") &&
                                !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDump") &&
                                !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpUp") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI")
+                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI") &&
+                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("InveighZero")
                     }))
                 );
             }

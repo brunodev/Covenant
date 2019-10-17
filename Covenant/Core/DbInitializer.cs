@@ -49,7 +49,7 @@ namespace Covenant.Core
                         CommType = CommunicationType.SMB
                     }
                 };
-				templates.ForEach(T => T.ReadFromDisk());
+                templates.ForEach(T => T.ReadFromDisk());
                 await context.ImplantTemplates.AddRangeAsync(templates);
             }
         }
@@ -195,6 +195,12 @@ namespace Covenant.Core
                         Name = "SharpWMI", Description = "SharpWMI is a C# implementation of various WMI functionality.",
                         Location = Common.CovenantReferenceSourceLibraries + "SharpWMI" + Path.DirectorySeparatorChar,
                         SupportedDotNetVersions = new List<Common.DotNetVersion> { Common.DotNetVersion.Net35, Common.DotNetVersion.Net40 }
+                    },
+                    new ReferenceSourceLibrary
+                    {
+                        Name = "InveighZero", Description = "InveighZero is a C# LLMNR/mDNS/NBNS/DNS spoofer and man-in-the-middle tool",
+                        Location = Common.CovenantReferenceSourceLibraries + "InveighZero" + Path.DirectorySeparatorChar,
+                        SupportedDotNetVersions = new List<Common.DotNetVersion> { Common.DotNetVersion.Net40 }
                     }
                 };
                 await context.ReferenceSourceLibraries.AddRangeAsync(ReferenceSourceLibraries);
@@ -208,6 +214,8 @@ namespace Covenant.Core
                 var sdu = await context.GetReferenceSourceLibraryByName("SharpDump");
                 var su = await context.GetReferenceSourceLibraryByName("SharpUp");
                 var sw = await context.GetReferenceSourceLibraryByName("SharpWMI");
+                var iz = await context.GetReferenceSourceLibraryByName("InveighZero");
+
                 await context.AddRangeAsync(
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = ss, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net35) },
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = ss, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net40) },
@@ -304,7 +312,16 @@ namespace Covenant.Core
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net35) },
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net40) },
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Management.dll", Common.DotNetVersion.Net35) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Management.dll", Common.DotNetVersion.Net40) }
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Management.dll", Common.DotNetVersion.Net40) },
+
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net40) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.dll", Common.DotNetVersion.Net40) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net40) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.XML.dll", Common.DotNetVersion.Net40) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Xml.Linq.dll", Common.DotNetVersion.Net40) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Data.dll", Common.DotNetVersion.Net40) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Data.DataSetExtensions.dll", Common.DotNetVersion.Net40) }
+
                 );
             }
 
@@ -2115,7 +2132,27 @@ namespace Covenant.Core
                                 DisplayInCommand = true
                             }
                         }
-                    }
+                    },
+                    new GruntTask
+                    {
+                        Name = "InveighZero",
+                        AlternateNames = new List<string>(),
+                        Description = "InveighZero is a C# LLMNR/mDNS/NBNS/DNS spoofer and man-in-the-middle tool ",
+                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "InveighZero" + ".task")),
+                        Options = new List<GruntTaskOption>()
+                        {
+                            new GruntTaskOption
+                            {
+                                Id = 109,
+                                Name = "Command",
+                                Description = "The options to run InveighZero with. See https://github.com/Kevin-Robertson/InveighZero/wiki/Parameters",
+                                SuggestedValues = new List<string>(),
+                                Optional = true,
+                                DefaultValue = "",
+                                DisplayInCommand = true
+                            }
+                        }
+                    },
                 };
                 await context.GruntTasks.AddRangeAsync(GruntTasks);
                 await context.SaveChangesAsync();
@@ -2128,6 +2165,8 @@ namespace Covenant.Core
                 var sdu = await context.GetReferenceSourceLibraryByName("SharpDump");
                 var su = await context.GetReferenceSourceLibraryByName("SharpUp");
                 var sw = await context.GetReferenceSourceLibraryByName("SharpWMI");
+                var iz = await context.GetReferenceSourceLibraryByName("InveighZero");
+
                 await context.AddRangeAsync(
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("Shell") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("ShellCmd") },
@@ -2186,7 +2225,8 @@ namespace Covenant.Core
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistCOMHijack") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistStartup") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistAutorun") },
-    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistWMI") }
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistWMI") },
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = iz, GruntTask = await context.GetGruntTaskByName("InveighZero") }
                 );
 
                 var er1 = await context.GetEmbeddedResourceByName("SharpSploit.Resources.powerkatz_x64.dll");
@@ -2255,6 +2295,8 @@ namespace Covenant.Core
     new GruntTaskReferenceAssembly { GruntTask = screenshot, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Windows.Forms.dll", Common.DotNetVersion.Net40) }
 
                 );
+
+                await context.SaveChangesAsync();
             }
         }
 

@@ -19,3 +19,6 @@
 [submodule "Covenant/Data/ReferenceSourceLibraries/SharpWMI"]
 	path = Covenant/Data/ReferenceSourceLibraries/SharpWMI
 	url = https://github.com/GhostPack/SharpWMI
+[submodule "Covenant/Data/ReferenceSourceLibraries/InveighZero"]
+	path = Covenant/Data/ReferenceSourceLibraries/InveighZero
+	url = https://github.com/Kevin-Robertson/InveighZero.git
