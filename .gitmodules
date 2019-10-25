@@ -22,3 +22,6 @@
 [submodule "Covenant/Data/ReferenceSourceLibraries/InveighZero"]
 	path = Covenant/Data/ReferenceSourceLibraries/InveighZero
 	url = https://github.com/Kevin-Robertson/InveighZero.git
+[submodule "Covenant/Data/ReferenceSourceLibraries/SharpHound"]
+	path = Covenant/Data/ReferenceSourceLibraries/SharpHound
+	url = https://github.com/BloodHoundAD/SharpHound.git

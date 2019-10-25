@@ -198,9 +198,9 @@ namespace Covenant.Core
                     },
                     new ReferenceSourceLibrary
                     {
-                        Name = "InveighZero", Description = "InveighZero is a C# LLMNR/mDNS/NBNS/DNS spoofer and man-in-the-middle tool",
-                        Location = Common.CovenantReferenceSourceLibraries + "InveighZero" + Path.DirectorySeparatorChar,
-                        SupportedDotNetVersions = new List<Common.DotNetVersion> { Common.DotNetVersion.Net40 }
+                        Name = "SharpHound", Description = "SharpHound is a C# BloodHound Ingestor",
+                        Location = Common.CovenantReferenceSourceLibraries + "SharpHound" + Path.DirectorySeparatorChar,
+                        SupportedDotNetVersions = new List<Common.DotNetVersion> { Common.DotNetVersion.Net35 }
                     }
                 };
                 await context.ReferenceSourceLibraries.AddRangeAsync(ReferenceSourceLibraries);
@@ -214,7 +214,7 @@ namespace Covenant.Core
                 var sdu = await context.GetReferenceSourceLibraryByName("SharpDump");
                 var su = await context.GetReferenceSourceLibraryByName("SharpUp");
                 var sw = await context.GetReferenceSourceLibraryByName("SharpWMI");
-                var iz = await context.GetReferenceSourceLibraryByName("InveighZero");
+                var sh = await context.GetReferenceSourceLibraryByName("SharpHound");
 
                 await context.AddRangeAsync(
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = ss, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net35) },
@@ -314,13 +314,43 @@ namespace Covenant.Core
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Management.dll", Common.DotNetVersion.Net35) },
     new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sw, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Management.dll", Common.DotNetVersion.Net40) },
 
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net40) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.dll", Common.DotNetVersion.Net40) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net40) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.XML.dll", Common.DotNetVersion.Net40) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Xml.Linq.dll", Common.DotNetVersion.Net40) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Data.dll", Common.DotNetVersion.Net40) },
-    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = iz, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Data.DataSetExtensions.dll", Common.DotNetVersion.Net40) }
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Reflection.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Management.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Threading.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.ServiceModel.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Runtime.Serialization.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.XML.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Xml.Linq.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.DirectoryServices.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.DirectoryServices.Protocols.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("CommandLine.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("Heijden.Dns.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("ICSharpCode.SharpZipLib.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("Newtonsoft.Json.dll", Common.DotNetVersion.Net35) },
+    new ReferenceSourceLibraryReferenceAssembly { ReferenceSourceLibrary = sh, ReferenceAssembly = await context.GetReferenceAssemblyByName("protobuf-net.dll", Common.DotNetVersion.Net35) }
+
+    /*
+     *     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.Protocols" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+
+                1>      Fody/Costura:   	No reference to 'Costura.dll' found. References not modified.
+1>      Fody/Costura:   	Embedding 'C:\Users\sfr\Documents\tools\Covenant\Covenant\Data\ReferenceSourceLibraries\SharpHound\packages\CommandLineParser.1.9.71\lib\net35\CommandLine.dll'
+1>      Fody/Costura:   	Embedding 'C:\Users\sfr\Documents\tools\Covenant\Covenant\Data\ReferenceSourceLibraries\SharpHound\packages\Heijden.Dns.2.0.0\lib\net35\Heijden.Dns.dll'
+1>      Fody/Costura:   	Embedding 'C:\Users\sfr\Documents\tools\Covenant\Covenant\Data\ReferenceSourceLibraries\SharpHound\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll'
+1>      Fody/Costura:   	Embedding 'C:\Users\sfr\Documents\tools\Covenant\Covenant\Data\ReferenceSourceLibraries\SharpHound\packages\Newtonsoft.Json.11.0.2\lib\net35\Newtonsoft.Json.dll'
+1>      Fody/Costura:   	Embedding 'C:\Users\sfr\Documents\tools\Covenant\Covenant\Data\ReferenceSourceLibraries\SharpHound\packages\protobuf-net.2.4.0\lib\net35\protobuf-net.dll'
+1>      Fody/Costura:   	Embedding 'C:\Users\sfr\Documents\tools\Covenant\Covenant\Data\ReferenceSourceLibraries\SharpHound\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll'
+    
+                 */
 
                 );
             }
@@ -2135,17 +2165,17 @@ namespace Covenant.Core
                     },
                     new GruntTask
                     {
-                        Name = "InveighZero",
+                        Name = "SharpHound",
                         AlternateNames = new List<string>(),
-                        Description = "InveighZero is a C# LLMNR/mDNS/NBNS/DNS spoofer and man-in-the-middle tool ",
-                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "InveighZero" + ".task")),
+                        Description = "SharpHound is a C# BloodHound Ingestor",
+                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "SharpHound" + ".task")),
                         Options = new List<GruntTaskOption>()
                         {
                             new GruntTaskOption
                             {
                                 Id = 109,
-                                Name = "Command",
-                                Description = "The options to run InveighZero with. See https://github.com/Kevin-Robertson/InveighZero/wiki/Parameters",
+                                Name = "Arguments",
+                                Description = "The options to run Sharphound with. See https://github.com/BloodHoundAD/SharpHound",
                                 SuggestedValues = new List<string>(),
                                 Optional = true,
                                 DefaultValue = "",
@@ -2153,6 +2183,26 @@ namespace Covenant.Core
                             }
                         }
                     },
+                    new GruntTask
+                    {
+                        Name = "UACBypassSdclt",
+                        AlternateNames = new List<string>(),
+                        Description = "UAC Bypass using sdclt.exe - http://blog.sevagas.com/?Yet-another-sdclt-UAC-bypass",
+                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "UACBypassSdclt" + ".task")),
+                        Options = new List<GruntTaskOption>()
+                        {
+                            new GruntTaskOption
+                            {
+                                Id = 110,
+                                Name = "Command",
+                                Description = "The value of the registry key. Should contain the full command you want to run",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DefaultValue = "",
+                                DisplayInCommand = true
+                            }
+                        }
+                    }
                 };
                 await context.GruntTasks.AddRangeAsync(GruntTasks);
                 await context.SaveChangesAsync();
@@ -2165,7 +2215,7 @@ namespace Covenant.Core
                 var sdu = await context.GetReferenceSourceLibraryByName("SharpDump");
                 var su = await context.GetReferenceSourceLibraryByName("SharpUp");
                 var sw = await context.GetReferenceSourceLibraryByName("SharpWMI");
-                var iz = await context.GetReferenceSourceLibraryByName("InveighZero");
+                var sh = await context.GetReferenceSourceLibraryByName("SharpHound");
 
                 await context.AddRangeAsync(
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("Shell") },
@@ -2226,7 +2276,7 @@ namespace Covenant.Core
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistStartup") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistAutorun") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistWMI") },
-    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = iz, GruntTask = await context.GetGruntTaskByName("InveighZero") }
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = sh, GruntTask = await context.GetGruntTaskByName("SharpHound") }
                 );
 
                 var er1 = await context.GetEmbeddedResourceByName("SharpSploit.Resources.powerkatz_x64.dll");
@@ -2249,12 +2299,36 @@ namespace Covenant.Core
                     new GruntTaskEmbeddedResource { EmbeddedResource = er2, GruntTask = await context.GetGruntTaskByName("DCSync") },
                     new GruntTaskEmbeddedResource { EmbeddedResource = er2, GruntTask = await context.GetGruntTaskByName("SafetyKatz") }
                 );
+
+                // Sharphound
+
+                var commandLine = await context.GetEmbeddedResourceByName("CommandLine.dll");
+                var heijdenDns = await context.GetEmbeddedResourceByName("Heijden.Dns.dll");
+                var sharpZipLib = await context.GetEmbeddedResourceByName("ICSharpCode.SharpZipLib.dll");
+                var newtonSoftJson = await context.GetEmbeddedResourceByName("Newtonsoft.Json.dll");
+                var protobuf = await context.GetEmbeddedResourceByName("protobuf-net.dll");
+                var threading = await context.GetEmbeddedResourceByName("System.Threading.dll");
+
+                var sharpHoundTask = await context.GetGruntTaskByName("SharpHound");
+
+                await context.AddRangeAsync(
+                    new GruntTaskEmbeddedResource { EmbeddedResource = commandLine, GruntTask = sharpHoundTask },
+                    new GruntTaskEmbeddedResource { EmbeddedResource = heijdenDns, GruntTask = sharpHoundTask },
+                    new GruntTaskEmbeddedResource { EmbeddedResource = sharpZipLib, GruntTask = sharpHoundTask },
+                    new GruntTaskEmbeddedResource { EmbeddedResource = newtonSoftJson, GruntTask = sharpHoundTask },
+                    new GruntTaskEmbeddedResource { EmbeddedResource = protobuf, GruntTask = sharpHoundTask },
+                    new GruntTaskEmbeddedResource { EmbeddedResource = threading, GruntTask = sharpHoundTask }
+                );
+
+
                 var upload = await context.GetGruntTaskByName("Upload");
                 var download = await context.GetGruntTaskByName("Download");
                 var privexchange = await context.GetGruntTaskByName("PrivExchange");
                 var screenshot = await context.GetGruntTaskByName("ScreenShot");
                 var readtextfile = await context.GetGruntTaskByName("ReadTextFile");
                 var getcurrentdir = await context.GetGruntTaskByName("GetCurrentDirectory");
+                var uacBypassSdclt = await context.GetGruntTaskByName("UACBypassSdclt");
+
                 await context.AddRangeAsync(
     new GruntTaskReferenceAssembly { GruntTask = upload, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net35) },
     new GruntTaskReferenceAssembly { GruntTask = upload, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net40) },
@@ -2292,7 +2366,14 @@ namespace Covenant.Core
     new GruntTaskReferenceAssembly { GruntTask = screenshot, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Drawing.dll", Common.DotNetVersion.Net35) },
     new GruntTaskReferenceAssembly { GruntTask = screenshot, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Drawing.dll", Common.DotNetVersion.Net40) },
     new GruntTaskReferenceAssembly { GruntTask = screenshot, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Windows.Forms.dll", Common.DotNetVersion.Net35) },
-    new GruntTaskReferenceAssembly { GruntTask = screenshot, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Windows.Forms.dll", Common.DotNetVersion.Net40) }
+    new GruntTaskReferenceAssembly { GruntTask = screenshot, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Windows.Forms.dll", Common.DotNetVersion.Net40) },
+
+        new GruntTaskReferenceAssembly { GruntTask = uacBypassSdclt, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net35) },
+        new GruntTaskReferenceAssembly { GruntTask = uacBypassSdclt, ReferenceAssembly = await context.GetReferenceAssemblyByName("mscorlib.dll", Common.DotNetVersion.Net40) },
+        new GruntTaskReferenceAssembly { GruntTask = uacBypassSdclt, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.dll", Common.DotNetVersion.Net35) },
+        new GruntTaskReferenceAssembly { GruntTask = uacBypassSdclt, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.dll", Common.DotNetVersion.Net40) },
+        new GruntTaskReferenceAssembly { GruntTask = uacBypassSdclt, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net35) },
+        new GruntTaskReferenceAssembly { GruntTask = uacBypassSdclt, ReferenceAssembly = await context.GetReferenceAssemblyByName("System.Core.dll", Common.DotNetVersion.Net40) }
 
                 );
 

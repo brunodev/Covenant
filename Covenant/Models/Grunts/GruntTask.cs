@@ -157,7 +157,7 @@ namespace Covenant.Models.Grunts
                         })
                     );
                 });
-                if (this.ReferenceSourceLibraries.Any(c => c.SupportedDotNetVersions.Contains(Common.DotNetVersion.Net35)))
+                if (ReferenceSourceLibraries.Count == 0 || this.ReferenceSourceLibraries.Any(c => c.SupportedDotNetVersions.Contains(Common.DotNetVersion.Net35)))
                 {
 
                     List<Compiler.Reference> references35 = new List<Compiler.Reference>();
@@ -194,46 +194,51 @@ namespace Covenant.Models.Grunts
                                    !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDump") &&
                                    !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpUp") &&
                                    !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI") &&
-                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("InveighZero")
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpHound")
                         }))
                     );
                 }
-                List<Compiler.Reference> references40 = new List<Compiler.Reference>();
-                this.ReferenceSourceLibraries.ToList().ForEach(RSL =>
+
+                if (ReferenceSourceLibraries.Count == 0 || this.ReferenceSourceLibraries.Any(c => c.SupportedDotNetVersions.Contains(Common.DotNetVersion.Net40)))
                 {
+
+                    List<Compiler.Reference> references40 = new List<Compiler.Reference>();
+                    this.ReferenceSourceLibraries.ToList().ForEach(RSL =>
+                    {
+                        references40.AddRange(
+                            RSL.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net40).Select(RA =>
+                            {
+                                return new Compiler.Reference { File = RA.Location, Framework = Common.DotNetVersion.Net40, Enabled = true };
+                            })
+                        );
+                    });
                     references40.AddRange(
-                        RSL.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net40).Select(RA =>
+                        this.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net40).Select(RA =>
                         {
                             return new Compiler.Reference { File = RA.Location, Framework = Common.DotNetVersion.Net40, Enabled = true };
                         })
                     );
-                });
-                references40.AddRange(
-                    this.ReferenceAssemblies.Where(RA => RA.DotNetVersion == Common.DotNetVersion.Net40).Select(RA =>
-                    {
-                        return new Compiler.Reference { File = RA.Location, Framework = Common.DotNetVersion.Net40, Enabled = true };
-                    })
-                );
-                File.WriteAllBytes(Common.CovenantTaskCSharpCompiledNet40Directory + this.Name + ".compiled",
-                    Utilities.Compress(Compiler.Compile(new Compiler.CompilationRequest
-                    {
-                        Source = this.Code,
-                        SourceDirectories = this.ReferenceSourceLibraries.Select(RSL => RSL.Location).ToList(),
-                        TargetDotNetVersion = Common.DotNetVersion.Net40,
-                        References = references40,
-                        EmbeddedResources = resources,
-                        UnsafeCompile = this.UnsafeCompile,
-                        Confuse = true,
-                        // TODO: Fix optimization to work with GhostPack
-                        Optimize = !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Rubeus") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Seatbelt") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDPAPI") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDump") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpUp") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI") &&
-                               !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("InveighZero")
-                    }))
-                );
+                    File.WriteAllBytes(Common.CovenantTaskCSharpCompiledNet40Directory + this.Name + ".compiled",
+                        Utilities.Compress(Compiler.Compile(new Compiler.CompilationRequest
+                        {
+                            Source = this.Code,
+                            SourceDirectories = this.ReferenceSourceLibraries.Select(RSL => RSL.Location).ToList(),
+                            TargetDotNetVersion = Common.DotNetVersion.Net40,
+                            References = references40,
+                            EmbeddedResources = resources,
+                            UnsafeCompile = this.UnsafeCompile,
+                            Confuse = true,
+                            // TODO: Fix optimization to work with GhostPack
+                            Optimize = !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Rubeus") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("Seatbelt") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDPAPI") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpDump") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpUp") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpWMI") &&
+                                   !this.ReferenceSourceLibraries.Select(RSL => RSL.Name).Contains("SharpHound")
+                        }))
+                    );
+                }
             }
         }
     }

