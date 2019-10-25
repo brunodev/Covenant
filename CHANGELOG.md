@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added GetCurrentDirectory task
 - Added DCSync task
 - Added ReadTextFile (cat) task
+- Added support to supply CLI options via environment variables
+- Added Delete (rm/del) task
+- Added PowerShellRemotingCommand/PowerShellRemotingGrunt tasks
+- Added Kill task
 
 ### Changed
 - Changed command-line parsing, Task parsing, added DefaultValue for optional parameters
@@ -18,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed PowerShellImport Task tab to use file control
 - Changed PowerShellImport to strip PowerShell ISE magic header value
 - Updated SharpSploit to latest version, updated powerkatz dlls
+- Improved PortScan to accept port ranges
+- Updated SharpSploit to latest version
 
 ### Fixed
 - Fixed ConnectAttemptCount incrementing on valid response w/o a task
@@ -33,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed bug preventing files with the same name being hosted on different Listeners
 - Fixed WMIGrunt adding executable name twice to command
 - Fixed CapturedCredential parsing with ':' character
+- Fixed change Grunt name, SetOption commands
+- Fix changing Grunt status to Exited
 
 ## [v0.3.2] - 2019-09-11
 ### Added
