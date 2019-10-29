@@ -2331,7 +2331,7 @@ namespace Covenant.Core
                         {
                             new GruntTaskOption
                             {
-                                Id = 109,
+                                Id = 121,
                                 Name = "Arguments",
                                 Description = "The options to run Sharphound with. See https://github.com/BloodHoundAD/SharpHound",
                                 SuggestedValues = new List<string>(),
@@ -2351,7 +2351,7 @@ namespace Covenant.Core
                         {
                             new GruntTaskOption
                             {
-                                Id = 110,
+                                Id = 122,
                                 Name = "Command",
                                 Description = "The value of the registry key. Should contain the full command you want to run",
                                 SuggestedValues = new List<string>(),

@@ -204,16 +204,22 @@ namespace GruntExecutor
                     {
                         object[] parameters = null;
                         if (pieces.Length > 1) { parameters = new object[pieces.Length - 1]; }
+
                         for (int i = 1; i < pieces.Length; i++) { parameters[i - 1] = Encoding.UTF8.GetString(Convert.FromBase64String(pieces[i])); }
                         byte[] compressedBytes = Convert.FromBase64String(pieces[0]);
                         byte[] decompressedBytes = Utilities.Decompress(compressedBytes);
                         Assembly gruntTask = Assembly.Load(decompressedBytes);
-                        output += "\nParameters:\n";
-                        foreach (var par in parameters)
-                        {
-                            output += par + "\n";
 
+                        output += "\nParameters:\n";
+
+                        if (parameters != null)
+                        {
+                            foreach (var par in parameters)
+                            {
+                                output += par + "\n";
+                            }
                         }
+
                         output += "\n";
                         output += "Result:\n";
 
