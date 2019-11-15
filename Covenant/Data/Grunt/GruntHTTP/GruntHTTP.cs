@@ -20,6 +20,7 @@ namespace GruntExecutor
         {
             try
             {
+
                 int Delay = Convert.ToInt32(@"{{REPLACE_DELAY}}");
                 int Jitter = Convert.ToInt32(@"{{REPLACE_JITTER_PERCENT}}");
                 int ConnectAttempts = Convert.ToInt32(@"{{REPLACE_CONNECT_ATTEMPTS}}");
@@ -58,6 +59,14 @@ namespace GruntExecutor
                         Integrity = 3;
                     }
                 }
+
+                if (MutexExist(Integrity))
+                {
+                    return;
+                }
+
+                SetMutex(Integrity);
+
                 string UserDomainName = Environment.UserDomainName;
                 string UserName = Environment.UserName;
 
@@ -259,6 +268,27 @@ namespace GruntExecutor
                 catch (Exception) { }
             }
             return WindowsIdentity.GetCurrent().Token;
+        }
+
+        public static bool MutexExist(int integrity)
+        {
+
+            try
+            {
+                var mutex = System.Threading.Mutex.OpenExisting("ColoMutex-" + integrity);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static Mutex Mutex;
+        public static void SetMutex(int integrity)
+        {
+            Mutex = new Mutex(true, "ColoMutex-" + integrity);
         }
     }
 
@@ -1008,5 +1038,6 @@ namespace GruntExecutor
         }
 
         // {{REPLACE_PROFILE_MESSAGE_TRANSFORM}}
+
     }
 }
